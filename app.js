@@ -1,29 +1,36 @@
+const puppeteer = require('puppeteer');
+
 //ler a pagina do insta
 
-//pegar os comentarios / arrobas
-const fakeAtSign = [
-    '@neymar',
-    '@harrystyles',
-    '@louist91',
-    '@niallhoran',
-    '@mileycyrus',
-    '@beyonce',
-    '@badgalriri',
-    '@taylorswift',
-    '@aliciakeys',
-    '@ritaora',
-    '@beyonce',
-    '@therealcarlospena',
-    '@sivathewanted',
-    '@louist91',
-    '@birdspotting',
-    '@manugavassi',
-    '@pitty',
-    '@micheltelo',
-    '@lucaslucco',
-    '@claudialeitte',
-    '@emmawatson'
-]
+async function start() {
+
+    async function loadMore(page, selector) {
+        const moreButton = await page.$(selector);
+        if(moreButton){
+            console.log("More")
+            await moreButton.click();
+            await page.waitFor(selector, {timeout: 3000}).catch(() => { console.log("timeout") });
+            await loadMore(page, selector)
+        }
+    }
+
+    //pegar os comentarios / arrobas
+
+async function getComments(page, selector) {
+    const comments = await page.$$eval(selector, links => links.map(link => link.innerText))
+    return comments ;
+}
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('https://www.instagram.com/p/CChMVvQgYKK/');
+
+    await loadMore(page, '.dCJp8');
+    const comments = await getComments(page, '.C4VMK span a');
+    console.log(comments);
+}
+
+
 
 //contar arrobas repetidas
 
@@ -43,4 +50,5 @@ function sort(counted) {
     console.log(sorted);
 }
 
-sort(count(fakeAtSign));
+//sort(count(fakeAtSign));
+start();
