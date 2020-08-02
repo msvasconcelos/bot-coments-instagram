@@ -26,8 +26,12 @@ async function getComments(page, selector) {
     await page.goto('https://www.instagram.com/p/CChMVvQgYKK/');
 
     await loadMore(page, '.dCJp8');
-    const comments = await getComments(page, '.C4VMK span a');
-    console.log(comments);
+    const atsing = await getComments(page, '.C4VMK span a');
+    const counted = count(atsing);
+    const sorted = sort(counted); 
+    sorted.forEach(arroba => { console.log(arroba) })
+    
+    await browser.close();
 }
 
 
@@ -47,7 +51,7 @@ function sort(counted) {
     const entries = Object.entries(counted);
     //console.log(entries);
     const sorted = entries.sort((a,b) => b[1] - a[1]);
-    console.log(sorted);
+    return sorted
 }
 
 //sort(count(fakeAtSign));
