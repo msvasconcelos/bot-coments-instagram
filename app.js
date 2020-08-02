@@ -32,5 +32,15 @@ function count(atsing){
     atsing.forEach(atsing => { count[atsing] = ( count[atsing] || 0) +1 });
     return count;
 }
-console.log(count(fakeAtSign));
+//console.log(count(fakeAtSign));
+
 //ordenar
+
+function sort(counted) {
+    const entries = Object.entries(counted);
+    //console.log(entries);
+    const sorted = entries.sort((a,b) => b[1] - a[1]);
+    console.log(sorted);
+}
+
+sort(count(fakeAtSign));
